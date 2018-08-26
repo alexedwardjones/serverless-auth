@@ -1,5 +1,3 @@
-# serverless.yml
-
 service: auth
 
 custom:
@@ -15,6 +13,9 @@ provider:
     DB: ${self:custom.secrets.DB}
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
+
+plugins:
+  - serverless-webpack
 
 functions:
   verifyToken:

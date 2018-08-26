@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs-then');
 
-const dbConnection = require('../../shared/database/connect');
-const User = require('../../models/User');
+const dbConnection = require('../../../shared/database/connect');
+const User = require('../../../models/User');
 
 module.exports.register = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

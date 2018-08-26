@@ -1,5 +1,5 @@
-const dbConnection = require('../../shared/database/connect');
-const User = require('../../models/User');
+const dbConnection = require('../../../shared/database/connect');
+const User = require('../../../models/User');
 
 module.exports.getUsers = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
