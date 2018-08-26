@@ -43,7 +43,7 @@ functions:
           path: me
           method: get
           cors: true
-          authorizer: verify-token
+          authorizer: verifyToken
 
   getUsers:
     handler: handlers/UserHandler.getUsers
