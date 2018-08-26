@@ -64,4 +64,4 @@ typings/
 .serverless
 
 # Config file
-donotinclude.js
+donotinclude.json
