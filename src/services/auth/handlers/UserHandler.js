@@ -1,5 +1,3 @@
-// UserHandler.js
-
 const dbConnection = require('../../shared/database/connect');
 const User = require('../../models/User');
 
