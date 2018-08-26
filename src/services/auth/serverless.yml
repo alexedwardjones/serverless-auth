@@ -46,7 +46,7 @@ functions:
           authorizer: verify-token
 
   getUsers:
-    handler: user/UserHandler.getUsers
+    handler: UserHandler.getUsers
     events:
       - http:
           path: users
