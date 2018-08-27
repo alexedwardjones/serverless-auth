@@ -66,15 +66,14 @@ function checkIfInputIsValid(eventBody) {
   }
 
   if (
-    !(eventBody.name &&
-      eventBody.name.length > 5 &&
-      typeof eventBody.name === 'string')
-  ) return Promise.reject(new Error('Username error. Username needs to longer than 5 characters'));
+    !(eventBody.username &&
+      typeof eventBody.username === 'string')
+  ) return Promise.reject(new Error('Username error.'));
 
   if (
     !(eventBody.email &&
-      typeof eventBody.name === 'string')
-  ) return Promise.reject(new Error('Email error. Email must have valid characters.'));
+      typeof eventBody.email === 'string')
+  ) return Promise.reject(new Error('Email error.'));
 
   return Promise.resolve();
 }
@@ -90,7 +89,7 @@ function register(eventBody) {
         : bcrypt.hash(eventBody.password, 8) // hash the pass
     )
     .then(hash =>
-      User.create({ name: eventBody.name, email: eventBody.email, password: hash }) 
+      User.create({ username: eventBody.username, email: eventBody.email, password: hash }) 
       // create the new user
     )
     .then(user => ({ auth: true, token: signToken(user._id) })); 
