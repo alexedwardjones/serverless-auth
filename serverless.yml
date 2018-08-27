@@ -14,9 +14,6 @@ provider:
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
 
-plugins:
-  - serverless-webpack
-
 functions:
   verifyToken:
     handler: handlers/VerifyToken.auth
