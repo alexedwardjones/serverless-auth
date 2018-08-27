@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 const name = 'user';
 
 const attributes = {
@@ -12,10 +14,12 @@ const attributes = {
   }
 }; 
 
-const options = {
-  timestamps: true
-}
-
-const User = sequelize.define(name, attributes, options);
-
-export default User;
+console.log(5);
+const User = dbConnection => {
+  console.log(name);
+  console.log(attributes);
+  console.log(dbConnection);
+  return dbConnection.define(name, attributes);
+};
+console.log(6);
+module.exports = User;

@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const slsw = require('serverless-webpack');
 
 module.exports = {
@@ -10,8 +9,5 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
   },
-  plugins: [
-    new webpack.IgnorePlugin(/^pg-native$/),
-    new webpack.IgnorePlugin(/^tedious$/),
-  ]
+  externals: ['mysql2', 'sqlite3', 'tedious', 'pg-native']
 };

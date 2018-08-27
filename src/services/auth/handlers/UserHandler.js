@@ -1,4 +1,4 @@
-const dbConnection = require('../../../shared/database/connect');
+const dbConnection = require('../../../shared/database/dbConnection');
 const User = require('../../../models/User');
 
 module.exports.getUsers = (event, context) => {

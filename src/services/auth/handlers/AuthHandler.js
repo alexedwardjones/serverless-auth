@@ -1,10 +1,15 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs-then');
 
-const dbConnection = require('../../../shared/database/connect');
-const User = require('../../../models/User');
+console.log(1);
+const dbConnection = require('../../../shared/database/dbConnection');
+console.log(2);
+console.log(dbConnection);
+const User = require('../../../models/User')(dbConnection);
+console.log(3);
 
 module.exports.register = (event, context) => {
+  console.log(event);
   context.callbackWaitsForEmptyEventLoop = false;
   return register(JSON.parse(event.body))
     .then(session => ({
