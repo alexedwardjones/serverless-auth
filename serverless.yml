@@ -1,7 +1,7 @@
 service: auth
 
 custom:
-  secrets: ${file(../../../donotinclude.json)}
+  secrets: ${file(donotinclude.json)}
 
 provider:
   name: aws
