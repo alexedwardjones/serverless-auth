@@ -1,41 +1,42 @@
-console.log('HERE');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs-then');
 
-console.log(1);
 const dbConnection = require('../database/dbConnection');
-console.log(2);
-console.log(dbConnection);
 const User = require('../models/User')(dbConnection);
-console.log(3);
+
+function handleError(error) {
+  return {
+    statusCode: error.statusCode || 500,
+    headers: { 'Content-Type': 'text/plain' },
+    body: error.message
+  };
+}
 
 module.exports.register = (event, context) => {
-  console.log(event);
+  console.log('register event', event);
   context.callbackWaitsForEmptyEventLoop = false;
-  return register(JSON.parse(event.body))
+
+  return Promise.resolve(event.body)
+    .then(JSON.parse)
+    .then(registerUser)
     .then(session => ({
       statusCode: 200,
       body: JSON.stringify(session)
     }))
-    .catch(err => ({
-      statusCode: err.statusCode || 500,
-      headers: { 'Content-Type': 'text/plain' },
-      body: err.message
-    }));
+    .catch(handleError);
 };
 
 module.exports.login = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  return login(JSON.parse(event.body))
+
+  return Promise.resolve(event.body)
+    .then(JSON.parse)
+    .then(loginUser)
     .then(session => ({
       statusCode: 200,
       body: JSON.stringify(session)
     }))
-    .catch(err => ({
-      statusCode: err.statusCode || 500,
-      headers: { 'Content-Type': 'text/plain' },
-      body: { stack: err.stack, message: err.message }
-    }));
+    .catch(handleError);
 };
 
 module.exports.me = (event, context) => {
@@ -45,11 +46,7 @@ module.exports.me = (event, context) => {
       statusCode: 200,
       body: JSON.stringify(session)
     }))
-    .catch(err => ({
-      statusCode: err.statusCode || 500,
-      headers: { 'Content-Type': 'text/plain' },
-      body: { stack: err.stack, message: err.message }
-    }));
+    .catch(handleError);
 };
 
 function signToken(id) {
@@ -79,7 +76,8 @@ function checkIfInputIsValid(eventBody) {
   return Promise.resolve();
 }
 
-function register(eventBody) {
+function registerUser(eventBody) {
+  console.log('registerUser eventBody', eventBody);
   return checkIfInputIsValid(eventBody) // validate input
     .then(() =>
       User.findOne({ email: eventBody.email }) // check if user exists
@@ -97,7 +95,7 @@ function register(eventBody) {
     // sign the token and send it back
 }
 
-function login(eventBody) {
+function loginUser(eventBody) {
   return User.findOne({ email: eventBody.email })
     .then(user =>
       !user
