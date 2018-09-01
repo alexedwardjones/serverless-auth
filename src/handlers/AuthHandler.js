@@ -1,11 +1,12 @@
+console.log('HERE');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs-then');
 
 console.log(1);
-const dbConnection = require('../../../shared/database/dbConnection');
+const dbConnection = require('../database/dbConnection');
 console.log(2);
 console.log(dbConnection);
-const User = require('../../../models/User')(dbConnection);
+const User = require('../models/User')(dbConnection);
 console.log(3);
 
 module.exports.register = (event, context) => {
