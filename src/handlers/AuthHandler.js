@@ -80,7 +80,11 @@ function registerUser(eventBody) {
   console.log('registerUser eventBody', eventBody);
   return checkIfInputIsValid(eventBody) // validate input
     .then(() =>
-      User.findOne({ email: eventBody.email }) // check if user exists
+      User.findOne({
+        where: {
+          email: eventBody.email
+        }
+      }) // check if user exists
     )
     .then(user =>
       user
@@ -96,7 +100,11 @@ function registerUser(eventBody) {
 }
 
 function loginUser(eventBody) {
-  return User.findOne({ email: eventBody.email })
+  return User.findOne({
+      where: {
+        email: eventBody.email
+      }
+    })
     .then(user =>
       !user
         ? Promise.reject(new Error('User with that email does not exits.'))
