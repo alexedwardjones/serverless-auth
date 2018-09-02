@@ -10,7 +10,8 @@ provider:
   region: eu-west-2
   environment:
     JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
-    DB: ${self:custom.secrets.DB}
+    DB_HOST: ${self:custom.secrets.DB_HOST}
+    DB_NAME: ${self:custom.secrets.DB_NAME}
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
 
