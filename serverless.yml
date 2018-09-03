@@ -3,6 +3,9 @@ service: auth
 custom:
   secrets: ${file(donotinclude.json)}
 
+plugins:
+  - serverless-pg-migrations
+
 provider:
   name: aws
   runtime: nodejs8.10
@@ -14,6 +17,13 @@ provider:
     DB_NAME: ${self:custom.secrets.DB_NAME}
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - ec2:CreateNetworkInterface
+        - ec2:DescribeNetworkInterfaces
+        - ec2:DeleteNetworkInterface
+      Resource: "*"
 
 functions:
   verifyToken:
@@ -51,3 +61,15 @@ functions:
           path: users
           method: get
           cors: true
+
+  up:
+    handler: src/database/migrations.up
+    timeout: 30
+    environment:
+      DATABASE_URL: postgres://${self:custom.secrets.DB_USER}:${self:custom.secrets.DB_PASSWORD}@${self:custom.secrets.DB_HOST}:5432/${self:custom.secrets.DB_NAME}
+
+  down:
+    handler: src/database/migrations.down
+    timeout: 30
+    environment:
+      DATABASE_URL: postgres://${self:custom.secrets.DB_USER}:${self:custom.secrets.DB_PASSWORD}@${self:custom.secrets.DB_HOST}:5432/${self:custom.secrets.DB_NAME}
