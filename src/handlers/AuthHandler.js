@@ -13,7 +13,6 @@ function handleError(error) {
 }
 
 module.exports.register = (event, context) => {
-  console.log('register event', event);
   context.callbackWaitsForEmptyEventLoop = false;
 
   return Promise.resolve(event.body)
@@ -79,22 +78,27 @@ function checkIfInputIsValid(eventBody) {
 function registerUser(eventBody) {
   console.log('registerUser eventBody', eventBody);
   return checkIfInputIsValid(eventBody) // validate input
-    .then(() =>
-      User.findOne({
+    .then(() => {
+      console.log('User find one', eventBody.email);
+      const user = User.findOne({
         where: {
           email: eventBody.email
         }
-      }) // check if user exists
-    )
-    .then(user =>
-      user
+      }); // check if user 
+      console.log('user', user);
+      return user;
+    })
+    .then(user => {
+      console.log('User exists');
+      return user
         ? Promise.reject(new Error('User with that email exists.'))
-        : bcrypt.hash(eventBody.password, 8) // hash the pass
-    )
-    .then(hash =>
-      User.create({ username: eventBody.username, email: eventBody.email, password: hash }) 
+        : bcrypt.hash(eventBody.password, 8); // hash the pass
+    })
+    .then(hash => {
+      console.log('User create');
+      return User.create({ username: eventBody.username, email: eventBody.email, password: hash });
       // create the new user
-    )
+    })
     .then(user => ({ auth: true, token: signToken(user._id) })); 
     // sign the token and send it back
 }
