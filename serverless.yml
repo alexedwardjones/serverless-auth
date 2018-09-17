@@ -4,7 +4,7 @@ custom:
   secrets: ${file(donotinclude.json)}
 
 plugins:
-  - serverless-pg-migrations
+  - serverless-transmogrify
 
 provider:
   name: aws
@@ -24,13 +24,20 @@ provider:
         - ec2:DescribeNetworkInterfaces
         - ec2:DeleteNetworkInterface
       Resource: "*"
+  vpc:
+    securityGroupIds:
+      - sg-d92e30b2
+    subnetIds:
+      - subnet-7c6cb706
+      - subnet-f7cc25bb
+      - subnet-5cff6135
 
 functions:
   verifyToken:
     handler: src/handlers/VerifyToken.auth
 
   login:
-    handler: src/handlers/AuthHandler.login
+    handler: src/handlers/LoginHandler
     events:
       - http:
           path: login
@@ -38,21 +45,12 @@ functions:
           cors: true
 
   register:
-    handler: src/handlers/AuthHandler.register
+    handler: src/handlers/RegisterHandler
     events:
       - http:
           path: register
           method: post
           cors: true
-
-  me:
-    handler: src/handlers/AuthHandler.me
-    events:
-      - http:
-          path: me
-          method: get
-          cors: true
-          authorizer: verifyToken
 
   getUsers:
     handler: src/handlers/UserHandler.getUsers
@@ -63,13 +61,7 @@ functions:
           cors: true
 
   up:
-    handler: src/database/migrations.up
-    timeout: 30
-    environment:
-      DATABASE_URL: postgres://${self:custom.secrets.DB_USER}:${self:custom.secrets.DB_PASSWORD}@${self:custom.secrets.DB_HOST}:5432/${self:custom.secrets.DB_NAME}
-
-  down:
-    handler: src/database/migrations.down
+    handler: transmogrify.up
     timeout: 30
     environment:
       DATABASE_URL: postgres://${self:custom.secrets.DB_USER}:${self:custom.secrets.DB_PASSWORD}@${self:custom.secrets.DB_HOST}:5432/${self:custom.secrets.DB_NAME}
