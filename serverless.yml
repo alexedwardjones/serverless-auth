@@ -37,7 +37,7 @@ functions:
     handler: src/handlers/VerifyToken.auth
 
   login:
-    handler: src/handlers/LoginHandler
+    handler: src/handlers/Login.handler
     events:
       - http:
           path: login
@@ -45,7 +45,7 @@ functions:
           cors: true
 
   register:
-    handler: src/handlers/RegisterHandler
+    handler: src/handlers/Register.handler
     events:
       - http:
           path: register

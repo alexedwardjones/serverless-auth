@@ -3,10 +3,11 @@ const User = require('../models/user')(db.sequelize, db.Sequelize);
 const handleError = require('../utils/handleError');
 const signToken = require('../utils/signToken');
 
-module.exports = (event, context) => {
+module.exports.handler = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   return Promise.resolve(event)
+    .then(event => event.body)
     .then(loginUser)
     .then(session => ({
       statusCode: 200,

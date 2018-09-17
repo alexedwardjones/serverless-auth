@@ -5,10 +5,11 @@ const User = require('../models/user')(db.sequelize, db.Sequelize);
 const handleError = require('../utils/handleError');
 const signToken = require('../utils/signToken');
 
-module.exports = (event, context) => {
+module.exports.handler = (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   return Promise.resolve(event)
+    .then(event => event.body)
     .then(registerUser)
     .then(session => ({
       statusCode: 200,
@@ -34,9 +35,10 @@ function registerUser(eventBody) {
 }
 
 function checkIfInputIsValid(eventBody) {
+  console.log(eventBody);
   if (
     !(eventBody.password &&
-      eventBody.password.length >= 7)
+      eventBody.password.length <= 8)
   ) {
     return Promise.reject(new Error('Password error. Password needs to be longer than 8 characters.'));
   }
